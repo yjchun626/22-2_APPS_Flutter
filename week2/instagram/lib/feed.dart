@@ -1,10 +1,25 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class Feed extends StatelessWidget {
+class Feed extends StatefulWidget {
   const Feed({
     Key? key,
+    // required: 필수 전달 매개 변수
+    // this.imageUrl: 많은 Feed 인스턴스 중 현재 인스턴스의 imageUrl
+    required this.imageUrl,
   }) : super(key: key);
+
+  final String imageUrl; // 이미지를 담을 변수
+
+  @override
+  State<Feed> createState() => _FeedState();
+}
+
+// 위의 StatelessWidget을 StatefulWidget으로 바꿔줌으로써 FeedState 클래스 추가
+
+class _FeedState extends State<Feed> {
+  // 좋아요 여부
+  bool isFavorite = false;
 
   @override
   Widget build(BuildContext context) {
@@ -14,7 +29,7 @@ class Feed extends StatelessWidget {
       children: [
         // 이미지
         Image.network(
-          "https://cdn2.thecatapi.com/images/kat_7kqBi.png",
+          widget.imageUrl, // 10번째 줄의 imageUrl 가져오기
           height: 400,
           width: double.infinity, // 폭 최대로 채우기
           fit: BoxFit.cover, // 이미지의 비율 유지하면서 고정된 폭, 높이에 맞추어 이미지 크기 잘라짐
@@ -24,10 +39,17 @@ class Feed extends StatelessWidget {
         Row(
           children: [
             IconButton(
-              onPressed: () {},
+              onPressed: () {
+                // 화면 갱신
+                setState(() {
+                  // 안쪽 코드 실행 후 화면 갱신
+                  // setState() 호출시 StatefulWidget의 build()함수를 호출해 화면을 갱신
+                  isFavorite = !isFavorite; // 좋아요 토글
+                });
+              },
               icon: Icon(
                 CupertinoIcons.heart,
-                color: Colors.black,
+                color: isFavorite ? Colors.pink : Colors.black,
               ),
             ),
             IconButton(
